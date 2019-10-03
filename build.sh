@@ -17,3 +17,7 @@ combiner="
 for file in `ls build/web/*.html`; do
 	echo $combiner | lua5.3 - $file
 done
+
+# Make the github pages site
+cp README.md docs/info.md
+cp -r build/web docs/game/
