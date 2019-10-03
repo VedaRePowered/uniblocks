@@ -9,7 +9,9 @@ express.get("/", (req, res) => {
 	res.send("Hello, World");
 });
 
-io.on("connection");
+io.on("connection", client => {
+	console.log("Recieved socket.io connection.");
+});
 
 console.log("Starting http server on port " + String(httpPort) + ", and starting socket.io");
 http.listen(httpPort);
