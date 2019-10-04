@@ -20,5 +20,5 @@ function init() {
 
 function draw() {
 	console.log("Frame");
-//	tile.draw(10, 10)
+	tile.draw(10, 10);
 }

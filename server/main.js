@@ -33,10 +33,10 @@ io.on("connection", function(client) {
 	players[playerId] = new Player();
 	console.log("Recieved socket.io connection. ID=" + String(playerId));
 	client.on("WorldGetTile", (tileId, sendResp) => {
-		console.log("gettile" + String(tileId));
-		fs.readFile("./world/tile" + String(tileId) + ".png", (err, data) => {
+		console.log("gettile: " + String(tileId));
+		fs.readFile("./world/tile/" + String(tileId) + ".png", (err, data) => {
 			if (err) {
-				console.log("f");
+				console.log(err)
 				sendResp(false, err);
 			} else {
 				console.log("s");
