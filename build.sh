@@ -30,7 +30,6 @@ combiner="
 	file:close()
 "
 
-echo $combiner
 echo $combiner | lua5.3 -
 
 # Make the github pages site

@@ -26,5 +26,3 @@ class Camera {
 		this.zoom = z;
 	}
 }
-
-function camera

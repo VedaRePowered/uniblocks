@@ -4,6 +4,7 @@ const httpPort = 5000;
 const Player = require("./player.js");
 const uuid = require("uuid/v4");
 const PNG = require("pngjs").PNG;
+const fs = require("fs")
 
 const express = require("express");
 const socket = require("socket.io");
@@ -32,7 +33,16 @@ io.on("connection", function(client) {
 	players[playerId] = new Player();
 	console.log("Recieved socket.io connection. ID=" + String(playerId));
 	client.on("WorldGetTile", (tileId, sendResp) => {
-		sendResp(true, {"name": "Dirt", "graphic": Buffer.alloc(256*3), "code": ""});
+		console.log("gettile" + String(tileId));
+		fs.readFile("./world/tile" + String(tileId) + ".png", (err, data) => {
+			if (err) {
+				console.log("f");
+				sendResp(false, err);
+			} else {
+				console.log("s");
+				sendResp(true, {"name": "TID=" + String(tileId), "graphic": "data:image/png;base64," + data.toString("base64"), "code": ""});
+			}
+		})
 	});
 	client.on("WorldGetRegion", (x, y, sendResp) => {
 		if (typeof(sendResp) == "function") {
