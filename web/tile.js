@@ -6,7 +6,7 @@ class Tile {
 		this.display = {"name": name};
 		this.code = code;
 	}
-	draw(x, y) {
-		canvasContext.drawImage(this.imageTag, x, y)
+	draw(x, y, z) {
+		canvasContext.drawImage(this.imageTag, x, y, z, z)
 	}
 }

@@ -3,7 +3,10 @@
 	<head>
 		<title>Uniblocks</title>
 		<link rel="icon" href="favicon.ico">
+
+		<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 		<link rel="stylesheet" href="app.css">
+
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="/camera.js"></script>
 		<script src="/player.js"></script>
@@ -11,13 +14,21 @@
 		<script src="/main.js"></script>
 	</head>
 	<body>
+		<div id="delete">
+			<div class="loading">
+				<span>Loading...</span>
+				<div class="loader"><div class="loader-bar"></div></div>
+			</div>
+		</div>
+		<script id="jserror">
+			/*<p class="error">ERROR: If you can read this, your
+			browser does not support JavaScript.</p>*/
+			document.getElementById("jserror").outerHTML = "";
+		</script>
 		<canvas id="mainCanvas"><p class="error">
 			ERROR: If you can read this, your browser does not
 			support web canvases.
 		</p></canvas>
-		<script>
-			init();
-			setInterval(draw, 16);
-		</script>
+		<script>init();</script>
 	</body>
 </html>
