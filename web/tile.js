@@ -6,7 +6,8 @@ class Tile {
 		this.display = {"name": name};
 		this.code = code;
 	}
-	draw(x, y, z) {
-		canvasContext.drawImage(this.imageTag, x, y, z, z)
+	draw(x, y) {
+		const screenPos = camera.toScreen(x, y);
+		canvasContext.drawImage(this.imageTag, screenPos.x-camera.zoom/2, screenPos.y-camera.zoom/2, camera.zoom, camera.zoom);
 	}
 }
