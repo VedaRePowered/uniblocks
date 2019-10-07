@@ -3,13 +3,17 @@
 npm i # Make sure deps are up to date
 for file in `ls server/*.js web/*.html web/*.js web/*.css`; do
 	mkdir -p build/`dirname $file`
-	rm build/$file
+	rm build/$file 2> /dev/null
 	touch build/$file
 	node node_modules/minify/bin/minify.js $file > build/$file
 done
-#cp web/*.png build/web/
-cp web/*.ico build/web/
-#cp web/*.md build/web/
+# copy asset files to built section, no errors
+cp web/*.png build/web/ 2> /dev/null
+cp web/*.ico build/web/ 2> /dev/null
+cp web/*.md build/web/  2> /dev/null
+
+mkdir -p build/web/socket.io
+cp node_modules/socket.io-client/dist/*.js build/web/socket.io/ 2> /dev/null
 
 combiner="
 	local file = io.open(\"build/web/index.html\")
@@ -34,4 +38,6 @@ echo $combiner | lua5.3 -
 
 # Make the github pages site
 cp README.md docs/info.md
-cp -r build/web docs/game/
+rm -rf docs/game/* 2> /dev/null
+mkdir -p docs/game
+cp -r build/web/* docs/game/ 2> /dev/null # no error if no files found

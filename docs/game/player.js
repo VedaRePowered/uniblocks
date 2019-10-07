@@ -1,0 +1,1 @@
+class Player{constructor(t){this.id=t,this.x=0,this.y=0,this.vx=0,this.vy=0,this.colour="#"+Math.floor(Math.random()*2**24).toString(16).padStart(6,"0")}draw(){canvasContext.fillStyle=this.colour;const t=camera.toScreen(this.x,this.y);canvasContext.fillRect(t.x-camera.zoom/2,t.y-camera.zoom/2,camera.zoom,camera.zoom)}}

@@ -1,0 +1,1 @@
+"use strict";class Camera{constructor(t){this.x=0,this.y=0,this.zoom=t}toScreen(t,s){return{x:(t-this.x)*this.zoom+vpSize.x/2,y:(s-this.y)*this.zoom+vpSize.y/2}}toWorld(t,s){return{x:(t-vpSize.x/2)/this.zoom+this.x,y:(s-vpSize.y/2)/this.zoom+this.y}}get pos(){return{x:p.x,y:p.y}}set pos(t){this.x=t.x,this.y=t.y}}
