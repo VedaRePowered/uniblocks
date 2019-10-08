@@ -1,19 +1,23 @@
 "use strict";
 
 let canvasContext;
-let camera;
 let socket;
-let tile;
+let camera;
 let player;
+let world;
 let vpSize;
+let tile;
 function init() {
 	const canvas = document.getElementById("mainCanvas");
 	canvasContext = canvas.getContext("2d");
-	camera = new Camera(64);
+	canvasContext.imageSmoothingEnabled = false;
 
 	socket = io("http://localhost:5000");
 	socket.on("connect", (playerId)=>{
+		camera = new Camera(64);
 		player = new Player(playerId);
+		world = new World();
+		world.update();
 		loadWorld();
 	});
 }
@@ -30,13 +34,15 @@ function loadWorld() {
 			loading.outerHTML = "";
 		}
 		setInterval(draw, 16);
-	})
+	});
 }
 
 function draw() {
-	vpSize = {"x": innerWidth, "y": innerHeight}
+	vpSize = {"x": innerWidth, "y": innerHeight};
 	document.getElementById("mainCanvas").width = vpSize.x;
 	document.getElementById("mainCanvas").height = vpSize.y;
-	tile.draw(0, 0);
-	player.draw(camera)
+
+	world.update();
+	world.draw();
+	player.draw();
 }

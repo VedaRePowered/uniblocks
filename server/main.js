@@ -19,11 +19,11 @@ app.use("world", express.static("world", {"extensions": ["json", "png"]}))
 const players = [];
 const world = {}; // world is devided into 256x256 regions
 function getRegion(x, y) {
-	if (typeof(world[Math.floor(x/256)]) !== "undefined") {
+	if (typeof(world[Math.floor(x/256)]) === "undefined") {
 		world[Math.floor(x/256)] = {};
 	}
-	if (typeof(world[Math.floor(x/256)][Math.floor(x/256)]) !== "undefined") {
-		world[Math.floor(x/256)][Math.floor(x/256)] = Buffer.alloc(65536);
+	if (typeof(world[Math.floor(x/256)][Math.floor(x/256)]) === "undefined") {
+		world[Math.floor(x/256)][Math.floor(x/256)] = Buffer.alloc(65536*16);
 	}
 	return world[Math.floor(x/256)][Math.floor(x/256)];
 }
