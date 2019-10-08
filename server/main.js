@@ -64,7 +64,7 @@ io.on("connection", function(client) {
 		}
 	});
 	client.on("WorldSetTile", (x, y, tileId) => {
-		ruidToBuf(tileId, getRegion(x, y), ((x%255)+(y%255*255))*16);
+		ruidToBuf(tileId, getRegion(x, y), ((x&255)+((y&255)*256))*16);
 	});
 	client.on("disconnect", () => {
 		players[playerId] = undefined;

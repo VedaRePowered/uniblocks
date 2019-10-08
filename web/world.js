@@ -5,19 +5,20 @@ function bufToRuid(buf, start) {
 	}
 	return ruid;
 }
+function ruidToBuf(ruid, buf, start) {
+	for (let i = 0; i < 16; i++) {
+		buf[start+i] = parseInt(ruid.substr(i*2, 2), 16);
+	}
+}
 class World {
 	constructor() {
 		this.regions = {};
 		this.tiles = {};
 		this.loadedPositionMin = {"x": NaN, "y": NaN};
-		this.defaultTile = new Tile("00000000000000000000000000000000", "Unknown", "data:image/png;base64,==", "");
-		socket.emit("WorldGetTile", "00000000000000000000000000000000", (success, data)=>{
-			if(success) {
-				this.defaultTile.graphic = data.graphic;
-			} else {
-				console.error("Failed to get default tile texture.");
-			}
-		});
+		this.defaultTile = new Tile("00000000000000000000000000000000", "Unknown", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4woIEBISRGtRKQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAJElEQVQoz2NkwAH+M/zHKs7EQCIY1UAMYMQV3owMjKOhRD8NACTzBB3yj0euAAAAAElFTkSuQmCC", "");
+
+		socket.emit("WorldSetTile", 0, 1, "65a5fce8876d8e5bad5da510edb9a3f");
+		socket.emit("WorldSetTile", 1, -1, "65a5fce8876d8e5bad5da510edb9a3f");
 	}
 	fetch(rx, ry) {
 		socket.emit("WorldGetRegion", rx*256, ry*256, reg=>{
@@ -78,13 +79,28 @@ class World {
 		this.loadedPositionMin = playerRegionMin;
 	}
 	draw() {
-		
+		let blocksSize = {"x": Math.ceil(vpSize.x/camera.zoom/2), "y": Math.ceil(vpSize.y/camera.zoom/2)};
+		for (let x = camera.x-blocksSize.x; x <= camera.x+blocksSize.x; x++) {
+			for (let y = camera.y-blocksSize.y; y <= camera.y+blocksSize.y; y++) {
+				const t = this.getTile(x, y);
+				if (t !== 0 && typeof(this.tiles[t]) !== "undefined") {
+					this.tiles[t].draw(x, y);
+				}
+			}
+		}
 	}
 	getTile(x, y) {
 		if (typeof(this.regions[Math.floor(x/256)]) !== "undefined" && typeof(this.regions[Math.floor(x/256)][Math.floor(y/256)]) !== "undefined") {
-			return this.regions[Math.floor(x/256)][Math.floor(y/256)][(x&255)|((y&255)<<8)] = tileId;
+			return bufToRuid(this.regions[Math.floor(x/256)][Math.floor(y/256)], ((x&255)+((y&255)*256))*16);
 		} else {
-			console.error("Error: GetTile in unloaded region.");
+			return "00000000000000000000000000000000"
+		}
+	}
+	setTile(x, y, tileId) {
+		if (typeof(this.regions[Math.floor(x/256)]) !== "undefined" && typeof(this.regions[Math.floor(x/256)][Math.floor(y/256)]) !== "undefined") {
+			ruidToBuf(tileId, this.regions[Math.floor(x/256)][Math.floor(y/256)], ((x&255)+((y&255)*256))*16);
+		} else {
+			console.error("Error: SetTile in unloaded region.");
 		}
 	}
 }
