@@ -1,16 +1,50 @@
+function bufToRuid(buf, start) {
+	let ruid = "";
+	for (let i = 0; i < 16; i++) {
+		ruid += ("0"+buf[start+i].toString(16)).slice(-2);
+	}
+	return ruid;
+}
 class World {
 	constructor() {
 		this.regions = {};
 		this.tiles = {};
 		this.loadedPositionMin = {"x": NaN, "y": NaN};
+		this.defaultTile = new Tile("00000000000000000000000000000000", "Unknown", "data:image/png;base64,==", "");
+		socket.emit("WorldGetTile", "00000000000000000000000000000000", (success, data)=>{
+			if(success) {
+				this.defaultTile.graphic = data.graphic;
+			} else {
+				console.error("Failed to get default tile texture.");
+			}
+		});
 	}
 	fetch(rx, ry) {
 		socket.emit("WorldGetRegion", rx*256, ry*256, reg=>{
 			if(typeof(this.regions[rx]) === "undefined") {
 				this.regions[rx] = {};
 			}
-			this.regions[rx][ry] = new Int8Array(reg);
+			this.regions[rx][ry] = new Uint8Array(reg);
 			console.log("loadedregion: ", rx, "/", ry);
+
+			let toLoad = {};
+			for (let i = 0; i < 65536*16; i += 16) {
+				const ruid = bufToRuid(this.regions[rx][ry], i);
+				if (ruid != "00000000000000000000000000000000" && typeof(this.tiles[ruid]) === "undefined" && typeof(toLoad[ruid]) === "undefined") {
+					toLoad[ruid] = true;
+					console.log("loadtile@", i);
+				}
+			}
+			for (const ruid of Object.keys(toLoad)) {
+				socket.emit("WorldGetTile", ruid, (success, data)=>{
+					if (success) {
+						this.tiles[ruid] = new Tile(ruid, data.name, data.graphic, data.code);
+					} else {
+						console.error("Error getting tile #" + ruid);
+						this.tiles[ruid] = this.defaultTile;
+					}
+				});
+			}
 		})
 	}
 	update() {

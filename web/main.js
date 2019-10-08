@@ -6,7 +6,6 @@ let camera;
 let player;
 let world;
 let vpSize;
-let tile;
 function init() {
 	const canvas = document.getElementById("mainCanvas");
 	canvasContext = canvas.getContext("2d");
@@ -18,18 +17,8 @@ function init() {
 		player = new Player(playerId);
 		world = new World();
 		world.update();
-		loadWorld();
-	});
-}
 
-function loadWorld() {
-	socket.emit("WorldGetTile", "0f15dd4e-1076-4677-9011-82dedb4225f7", (success, data) => {
-		if (!success) {
-			console.log("Error:" + toString(data));
-		} else {
-			tile = new Tile("0f15dd4e-1076-4677-9011-82dedb4225f7", data.name, data.graphic, data.code);
-		}
-		let loading = document.getElementById("delete");
+		const loading = document.getElementById("delete");
 		if (loading) {
 			loading.outerHTML = "";
 		}

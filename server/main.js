@@ -2,7 +2,6 @@
 const httpPort = 5000;
 
 const Player = require("./player.js");
-const uuid = require("uuid/v4");
 const PNG = require("pngjs").PNG;
 const fs = require("fs")
 
@@ -18,6 +17,14 @@ app.use("world", express.static("world", {"extensions": ["json", "png"]}))
 
 const players = [];
 const world = {}; // world is devided into 256x256 regions
+function ruid() { // random unique identifier
+	return "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx".replace(/x/g, inch=>{return Math.floor(Math.random()*16).toString(16)});
+}
+function ruidToBuf(ruid, buf, start) {
+	for (let i = 0; i < 16; i++) {
+		buf[start+i] = parseInt(ruid.substr(i*2, 2), 16);
+	}
+}
 function getRegion(x, y) {
 	if (typeof(world[Math.floor(x/256)]) === "undefined") {
 		world[Math.floor(x/256)] = {};
@@ -29,7 +36,7 @@ function getRegion(x, y) {
 }
 const tiles = [];
 io.on("connection", function(client) {
-	const playerId = uuid();
+	const playerId = ruid();
 	players[playerId] = new Player();
 	console.log("Recieved socket.io connection. ID=" + String(playerId));
 	client.on("WorldGetTile", (tileId, sendResp) => {
@@ -57,7 +64,7 @@ io.on("connection", function(client) {
 		}
 	});
 	client.on("WorldSetTile", (x, y, tileId) => {
-		getRegion(x, y)[(x&255)|((y&255)<<8)] = tileId;
+		ruidToBuf(tileId, getRegion(x, y), ((x%255)+(y%255*255))*16);
 	});
 	client.on("disconnect", () => {
 		players[playerId] = undefined;
