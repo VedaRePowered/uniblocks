@@ -80,8 +80,8 @@ class World {
 	}
 	draw() {
 		let blocksSize = {"x": Math.ceil(vpSize.x/camera.zoom/2), "y": Math.ceil(vpSize.y/camera.zoom/2)};
-		for (let x = camera.x-blocksSize.x; x <= camera.x+blocksSize.x; x++) {
-			for (let y = camera.y-blocksSize.y; y <= camera.y+blocksSize.y; y++) {
+		for (let x = Math.floor(camera.x)-blocksSize.x; x <= Math.floor(camera.x)+blocksSize.x; x++) {
+			for (let y = Math.floor(camera.y)-blocksSize.y; y <= Math.floor(camera.y)+blocksSize.y; y++) {
 				const t = this.getTile(x, y);
 				if (t !== 0 && typeof(this.tiles[t]) !== "undefined") {
 					this.tiles[t].draw(x, y);

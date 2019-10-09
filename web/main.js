@@ -5,6 +5,7 @@ let socket;
 let camera;
 let player;
 let world;
+let input;
 let vpSize;
 function init() {
 	const canvas = document.getElementById("mainCanvas");
@@ -14,6 +15,7 @@ function init() {
 	socket = io("http://localhost:5000");
 	socket.on("connect", (playerId)=>{
 		camera = new Camera(64);
+		input = new Input();
 		player = new Player(playerId);
 		world = new World();
 		world.update();
@@ -32,6 +34,9 @@ function draw() {
 	document.getElementById("mainCanvas").height = vpSize.y;
 
 	world.update();
+	player.input(input.held);
+	player.update();
+
 	world.draw();
 	player.draw();
 }

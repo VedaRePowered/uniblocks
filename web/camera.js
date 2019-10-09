@@ -7,16 +7,13 @@ class Camera {
 		this.zoom = zoom;
 	}
 	toScreen(x, y) {
-		return {"x": (x-this.x)*this.zoom+vpSize.x/2, "y": (y-this.y)*this.zoom+vpSize.y/2};
+		return {"x": (x-this.x)*this.zoom+vpSize.x/2, "y": vpSize.y/2-(y-this.y)*this.zoom};
 	}
 	toWorld(x, y) {
-		return {"x": (x-vpSize.x/2)/this.zoom+this.x, "y": (y-vpSize.y/2)/this.zoom+this.y};
+		return {"x": (x-vpSize.x/2)/this.zoom+this.x, "y": (vpSize.y/2*3-y)/this.zoom+this.y};
 	}
-	get pos() {
-		return {"x": p.x, "y": p.y};
-	}
-	set pos(p) {
-		this.x = p.x;
-		this.y = p.y;
+	scroll(tx, ty, speed) {
+		this.x = (this.x+tx*speed)/(1+speed)
+		this.y = (this.y+ty*speed)/(1+speed)
 	}
 }
