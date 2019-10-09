@@ -30,6 +30,21 @@ combiner="
 			print(\"Not found: build/web\" .. src)
 		end
 	end)
+	data = data:gsub(\"<link rel=stylesheet href=([^\\\"=<>]-)>\", function(src)
+		local style = io.open(\"build/web/\" .. src)
+		if style then
+			local css = style:read(\"*all\")
+			if css then
+				style:close()
+				return \"<style>\" .. css .. \"</style>\"
+			else
+				print(\"Not found: build/web/\" .. src)
+			end
+		else
+			print(\"Not found: build/web/\" .. src)
+		end
+	end)
+	data = data:gsub(\"/%*%%BUILDHOST%%%*/.-/%*%%ENDHOST%%%*/\", \"\\\"https://uniblocks.101100.ca:5000\\\"\")
 	file:write(data)
 	file:close()
 "

@@ -12,7 +12,7 @@ function init() {
 	canvasContext = canvas.getContext("2d");
 	canvasContext.imageSmoothingEnabled = false;
 
-	socket = io("http://localhost:5000");
+	socket = io(serverAddress);
 	socket.on("connect", (playerId)=>{
 		camera = new Camera(64);
 		input = new Input();
