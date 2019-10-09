@@ -1,0 +1,40 @@
+{
+	"esversion": 6,
+	"maxerr": 12,
+
+	"undef": true,
+	"curly": true,
+	"eqeqeq": true,
+	"nonew": true,
+	"shadow": "outer",
+	"strict": "global",
+	"varstmt": true,
+
+	"debug": true,
+	"loopfunc": true,
+
+	"browser": true,
+	"devel": true,
+	"globals": {
+		"innerWidth": true,
+		"innerHeight": true,
+
+		"io": true,
+		"serverAddress": true,
+
+		"canvasContext": true,
+		"socket": true,
+		"camera": true,
+		"player": true,
+		"world": true,
+		"input": true,
+		"vpSize": true,
+
+		"Camera": true,
+		"Input": true,
+		"Collision": true,
+		"Player": true,
+		"Tile": true,
+		"World": true
+	}
+}
