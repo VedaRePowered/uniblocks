@@ -1,9 +1,11 @@
+"use strict";
+
 class Player {
 	constructor(id) {
 		this.id = id;
 		this.x = 0; this.y = 0;
 		this.vx = 0; this.vy = 0;
-		this.colour = "#" + Math.floor(Math.random()*2**24).toString(16).padStart(6, "0");
+		this.colour = "#" + Math.floor(Math.random()*Math.pow(2, 24)).toString(16).padStart(6, "0");
 	}
 	input(held) {
 		if (held[37]) {

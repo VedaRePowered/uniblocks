@@ -1,3 +1,5 @@
+"use strict";
+
 class Tile {
 	constructor(tileId, name, graphic, code) {
 		this.imageTag = new Image(16, 16);

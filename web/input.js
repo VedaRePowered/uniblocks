@@ -1,3 +1,5 @@
+"use strict";
+
 class Input {
 	constructor() {
 		this.held = new Array(256);
@@ -9,7 +11,7 @@ class Input {
 				return; // Do nothing if the event was already processed
 			}
 
-			this.held[event.which] = true
+			this.held[event.which] = true;
 
 			// Cancel the default action to avoid it being handled twice
 			event.preventDefault();
@@ -19,7 +21,7 @@ class Input {
 				return; // Do nothing if the event was already processed
 			}
 
-			this.held[event.which] = false
+			this.held[event.which] = false;
 
 			// Cancel the default action to avoid it being handled twice
 			event.preventDefault();

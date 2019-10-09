@@ -1,3 +1,5 @@
+"use strict";
+
 function bufToRuid(buf, start) {
 	let ruid = "";
 	for (let i = 0; i < 16; i++) {
@@ -31,7 +33,7 @@ class World {
 			let toLoad = {};
 			for (let i = 0; i < 65536*16; i += 16) {
 				const ruid = bufToRuid(this.regions[rx][ry], i);
-				if (ruid != "00000000000000000000000000000000" && typeof(this.tiles[ruid]) === "undefined" && typeof(toLoad[ruid]) === "undefined") {
+				if (ruid !== "00000000000000000000000000000000" && typeof(this.tiles[ruid]) === "undefined" && typeof(toLoad[ruid]) === "undefined") {
 					toLoad[ruid] = true;
 					console.log("loadtile@", i);
 				}
@@ -46,24 +48,24 @@ class World {
 					}
 				});
 			}
-		})
+		});
 	}
 	update() {
 		// The four regions that are closest to the player should always be loaded
-		const playerRegionMin = {"x": Math.floor((player.x-128)/256),"y": Math.floor((player.y-128)/256)}
+		const playerRegionMin = {"x": Math.floor((player.x-128)/256),"y": Math.floor((player.y-128)/256)};
 		let overlap = {}; // Overlap of regions, from the perspective of the NEW region (false=reload, true=keep)
 		overlap.ll =
-			(playerRegionMin.x == this.loadedPositionMin.x || playerRegionMin.x == this.loadedPositionMin.x+1) &&
-			(playerRegionMin.y == this.loadedPositionMin.y || playerRegionMin.y == this.loadedPositionMin.y+1);
+			(playerRegionMin.x === this.loadedPositionMin.x || playerRegionMin.x === this.loadedPositionMin.x+1) &&
+			(playerRegionMin.y === this.loadedPositionMin.y || playerRegionMin.y === this.loadedPositionMin.y+1);
 		overlap.lh =
-			(playerRegionMin.x == this.loadedPositionMin.x || playerRegionMin.x == this.loadedPositionMin.x+1) &&
-			(playerRegionMin.y+1 == this.loadedPositionMin.y || playerRegionMin.y+1 == this.loadedPositionMin.y+1);
+			(playerRegionMin.x === this.loadedPositionMin.x || playerRegionMin.x === this.loadedPositionMin.x+1) &&
+			(playerRegionMin.y+1 === this.loadedPositionMin.y || playerRegionMin.y+1 === this.loadedPositionMin.y+1);
 		overlap.hl =
-			(playerRegionMin.x+1 == this.loadedPositionMin.x || playerRegionMin.x+1 == this.loadedPositionMin.x+1) &&
-			(playerRegionMin.y == this.loadedPositionMin.y || playerRegionMin.y == this.loadedPositionMin.y+1);
+			(playerRegionMin.x+1 === this.loadedPositionMin.x || playerRegionMin.x+1 === this.loadedPositionMin.x+1) &&
+			(playerRegionMin.y === this.loadedPositionMin.y || playerRegionMin.y === this.loadedPositionMin.y+1);
 		overlap.hh =
-			(playerRegionMin.x+1 == this.loadedPositionMin.x || playerRegionMin.x+1 == this.loadedPositionMin.x+1) &&
-			(playerRegionMin.y+1 == this.loadedPositionMin.y || playerRegionMin.y+1 == this.loadedPositionMin.y+1);
+			(playerRegionMin.x+1 === this.loadedPositionMin.x || playerRegionMin.x+1 === this.loadedPositionMin.x+1) &&
+			(playerRegionMin.y+1 === this.loadedPositionMin.y || playerRegionMin.y+1 === this.loadedPositionMin.y+1);
 		if (!overlap.ll) {
 			this.fetch(playerRegionMin.x, playerRegionMin.y);
 		}
@@ -93,7 +95,7 @@ class World {
 		if (typeof(this.regions[Math.floor(x/256)]) !== "undefined" && typeof(this.regions[Math.floor(x/256)][Math.floor(y/256)]) !== "undefined") {
 			return bufToRuid(this.regions[Math.floor(x/256)][Math.floor(y/256)], ((x&255)+((y&255)*256))*16);
 		} else {
-			return "00000000000000000000000000000000"
+			return "00000000000000000000000000000000";
 		}
 	}
 	setTile(x, y, tileId) {

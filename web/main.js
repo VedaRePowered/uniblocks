@@ -28,7 +28,7 @@ function init() {
 	});
 	socket.on("WorldSetTile", (x, y, tileId)=>{
 		world.setTile(x, y, tileId);
-	})
+	});
 }
 
 function draw() {
