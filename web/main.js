@@ -26,6 +26,9 @@ function init() {
 		}
 		setInterval(draw, 16);
 	});
+	socket.on("WorldSetTile", (x, y, tileId)=>{
+		world.setTile(x, y, tileId);
+	})
 }
 
 function draw() {
