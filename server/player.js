@@ -1,3 +1,5 @@
+"use strict";
+/* jshint node: true */
 module.exports = class Player {
 	constructor() {
 		this.x = 0;
@@ -10,4 +12,4 @@ module.exports = class Player {
 		this.x = p.x;
 		this.y = p.y;
 	}
-}
+};
