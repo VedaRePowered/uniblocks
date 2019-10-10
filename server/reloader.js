@@ -3,19 +3,22 @@
 const chokidar = require("chokidar");
 const io = require ("socket.io")();
 
-let clients = [];
+let clients = {};
+let counter = 0
 io.on("connection", client => {
-	let pos = clients.length;
-	clients.push(client);
+	const id = counter;
+	counter += 1;
+	//let pos = clients.length;
+	clients[id] = client;
 	client.on("disconnect", () => {
-		clients.splice(pos, 1);
+		delete(clients[id]);
 	});
 });
 
 const watcher = chokidar.watch("./web");
 watcher.on("change", ()=>{
 	console.log("Client reloading.");
-	for (const client of clients) {
+	for (const client of Object.values(clients)) {
 		client.emit("reload");
 	}
 });
