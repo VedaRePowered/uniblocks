@@ -23,6 +23,9 @@ class Player {
 		this.jumping = false;
 		this.leftWallTimer = 0;
 		this.rightWallTimer = 0;
+		this.inventory = new Inventory();
+
+		this.inventory.addTile("65a5fce8876d8e5bad5da510edb9a30f");
 
 		this.colour = "#" + Math.floor(Math.random()*Math.pow(2, 24)).toString(16).padStart(6, "0");
 	}
@@ -88,5 +91,6 @@ class Player {
 		canvasContext.fillStyle = this.colour;
 		const screenPos = camera.toScreen(this.collider.x, this.collider.y);
 		canvasContext.fillRect(screenPos.x-camera.zoom/2, screenPos.y-camera.zoom/2, camera.zoom, camera.zoom);
+		this.inventory.draw();
 	}
 }

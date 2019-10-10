@@ -11,6 +11,10 @@ span {
 	color: whitesmoke;
 }
 
+.hidden {
+	display: none;
+}
+
 #delete {
 	margin: 0;
 	width: 100vw;

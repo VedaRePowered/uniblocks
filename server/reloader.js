@@ -4,7 +4,7 @@ const chokidar = require("chokidar");
 const io = require ("socket.io")();
 
 let clients = {};
-let counter = 0
+let counter = 0;
 io.on("connection", client => {
 	const id = counter;
 	counter += 1;

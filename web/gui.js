@@ -1,3 +1,5 @@
+"use strict";
+
 class Ui {
 	constructor() {
 		this.elements = [];
@@ -17,15 +19,14 @@ class Ui {
 
 class Button {
 	constructor(x, y, w, h, icon, callback) {
-		this.imageTag = new Image();
-		this.imageTag.src = icon;
+		this.imageTag = icon;
 		this.x = x; this.y = y;
 		this.width = w; this.height = h;
 		this.callback = callback;
 		this.pressed = false;
-		this.hovered = false
-		this.parent;
-		this.id;
+		this.hovered = false;
+		this.parent = {};
+		this.id = 0;
 
 		document.addEventListener("mousedown", e => {
 			if (e.clientX >= this.x && e.clientY >= this.y && e.clientX <= this.x+this.width && e.clientY <= this.y+this.height) {
@@ -36,7 +37,7 @@ class Button {
 			this.hovered = e.clientX >= this.x && e.clientY >= this.y && e.clientX <= this.x+this.width && e.clientY <= this.y+this.height;
 		});
 		document.addEventListener("mouseup", e => {
-			if (this.pressed && e.clientX >= this.x && e.clientY >= this.y && e.clientX <= this.x+this.width && e.clientY <= this.y+this.height) {
+			if (this.pressed && e.clientX >= this.x && e.clientY >= this.y && e.clientX <= this.x+this.width && e.clientY <= this.y+this.height && typeof(this.callback) === "function") {
 				this.callback();
 			}
 			this.pressed = false;
@@ -49,16 +50,15 @@ class Button {
 
 class Dragable {
 	constructor(x, y, w, h, icon, callback) {
-		this.imageTag = new Image();
-		this.imageTag.src = icon;
+		this.imageTag = icon;
 		this.x = x; this.y = y;
 		this.width = w; this.height = h;
 		this.callback = callback;
 		this.draging = false;
 		this.offsetX = 0;
 		this.offsetY = 0;
-		this.parent;
-		this.id;
+		this.parent = {};
+		this.id = 0;
 
 		document.addEventListener("mousedown", e => {
 			if (e.clientX >= this.x && e.clientY >= this.y && e.clientX <= this.x+this.width && e.clientY <= this.y+this.height) {
@@ -74,8 +74,8 @@ class Dragable {
 			}
 		});
 		document.addEventListener("mouseup", e => {
-			if (this.draging) {
-				this.callback(this.x, this.y);
+			if (this.draging && typeof(this.callback) === "function") {
+				this.callback(e.clientX, e.clientY);
 			}
 			this.draging = false;
 		});

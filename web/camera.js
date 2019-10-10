@@ -10,7 +10,7 @@ class Camera {
 		return {"x": (x-this.x)*this.zoom+vpSize.x/2, "y": vpSize.y/2-(y-this.y)*this.zoom};
 	}
 	toWorld(x, y) {
-		return {"x": (x-vpSize.x/2)/this.zoom+this.x, "y": (vpSize.y/2*3-y)/this.zoom+this.y};
+		return {"x": (x-vpSize.x/2)/this.zoom+this.x, "y": (vpSize.y/2-y)/this.zoom+this.y};
 	}
 	scroll(tx, ty, speed) {
 		this.x = (this.x+tx*speed)/(1+speed);

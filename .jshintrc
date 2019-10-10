@@ -31,6 +31,10 @@
 		"vpSize": true,
 
 		"Camera": true,
+		"Ui": true,
+		"Button": true,
+		"Dragable": true,
+		"Inventory": true,
 		"Input": true,
 		"Collision": true,
 		"Player": true,

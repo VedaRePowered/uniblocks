@@ -23,6 +23,24 @@ class World {
 			socket.emit("WorldSetTile", i, -3, "65a5fce8876d8e5bad5da510edb9a3f");
 			socket.emit("WorldSetTile", 3, i, "65a5fce8876d8e5bad5da510edb9a3f");
 		}
+		socket.emit("WorldSetTile", 0, 0, "65a5fce8876d8e5bad5da510edb9a3f");
+	}
+	loadTile(ruid, callback) {
+		if (typeof(this.tiles[ruid]) === "undefined") {
+			socket.emit("WorldGetTile", ruid, (success, data)=>{
+				if (success) {
+					this.tiles[ruid] = new Tile(ruid, data.name, data.graphic, data.code);
+				} else {
+					console.error("Error getting tile #" + ruid);
+					this.tiles[ruid] = this.defaultTile;
+				}
+				if (typeof(callback) === "function") {
+					callback(this.tiles[ruid]);
+				}
+			});
+		} else if (typeof(callback) === "function") {
+			callback(this.tiles[ruid]);
+		}
 	}
 	fetch(rx, ry) {
 		socket.emit("WorldGetRegion", rx, ry, reg=>{
@@ -41,14 +59,7 @@ class World {
 				}
 			}
 			for (const ruid of Object.keys(toLoad)) {
-				socket.emit("WorldGetTile", ruid, (success, data)=>{
-					if (success) {
-						this.tiles[ruid] = new Tile(ruid, data.name, data.graphic, data.code);
-					} else {
-						console.error("Error getting tile #" + ruid);
-						this.tiles[ruid] = this.defaultTile;
-					}
-				});
+				this.loadTile(ruid);
 			}
 		});
 	}
