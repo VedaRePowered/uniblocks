@@ -1,6 +1,6 @@
 "use strict";
 
-let registeredCollisionObjects = {};
+let registeredCollisionObjects = [];
 class Collision {
 	constructor(width, height) {
 		this.x = 0;
@@ -14,7 +14,7 @@ class Collision {
 		registeredCollisionObjects.push(this);
 	}
 
-	getPossibleCollisions(world, dx, dy) {
+	getPossibleCollisions(dx, dy) {
 		let possibleCollisionsReversed = {};
 		let possibleCollisions = [];
 		let step = Math.min(1/Math.max(Math.abs(dx), Math.abs(dy), 0.001), 1);
@@ -24,7 +24,7 @@ class Collision {
 			for (let ix = Math.floor(tx); ix <= Math.ceil(tx+this.width); ix++) {
 				for (let iy = Math.floor(ty); iy <= Math.ceil(ty+this.height); iy++) {
 					let code = Math.ceil(ix).toString() + ":" + Math.ceil(iy).toString();
-					if (typeof(possibleCollisionsReversed[code]) !== "undefined") {
+					if (typeof(possibleCollisionsReversed[code]) === "undefined") {
 						possibleCollisionsReversed[code] = true;
 						let tid = world.getTile(Math.ceil(ix), Math.ceil(iy));
 						if (tid !== "00000000000000000000000000000000") {
@@ -34,7 +34,7 @@ class Collision {
 				}
 			}
 		}
-		for (const [, co] in Object.entries(registeredCollisionObjects)) {
+		for (const co of registeredCollisionObjects) {
 			if (co.registeredId !== this.registeredId) {
 				possibleCollisions.push({"x": co.x-co.width/2, "y": co.y+co.height/2, "width": co.width, "height": co.height, "dx": co.vx, "dy": co.vy}); // drag velocity
 			}
@@ -70,14 +70,14 @@ class Collision {
 		return swapped ? (1-nLy) : nLy; // how far until hit
 	}
 
-	onePass(world, delta) {
+	onePass(delta) {
 		let gx = this.x+this.vx*delta, gy = this.y+this.vy*delta; // goal
 		let hitX = {"collision": false, "newX": gx}, hitY = {"collision": false, "newY": gy};
 		let hEdge = this.width/2, vEdge = this.height/2;
 
-		let blocks = this.getPossibleCollisions(world, this.vx*delta, this.vy*delta);
+		let blocks = this.getPossibleCollisions(this.vx*delta, this.vy*delta);
 		// vertical collision
-		for (const [, b] in Object.entries(blocks)) {
+		for (const b of blocks) {
 			if (this.vy*delta > 0) {
 				let colliding = this.singleFaceCollide(this.x-hEdge, this.y+vEdge, gx-hEdge, gy+vEdge, b.x, b.x+b.width, b.y-b.height);
 				if (colliding && (!hitY.collision || colliding < hitY.linear)) {
@@ -91,7 +91,7 @@ class Collision {
 			}
 		}
 		// horizontal collision
-		for (const [, b] in Object.entries(blocks)) {
+		for (const b of blocks) {
 			if (this.vx*delta > 0) {
 				let colliding = this.singleFaceCollide(this.y-vEdge, this.x+hEdge, gy-vEdge, gx+hEdge, b.y, b.y-b.height, b.x);
 				if (colliding && (!hitX.collision || colliding < hitX.linear)) {
@@ -108,20 +108,20 @@ class Collision {
 		return [hitX, hitY];
 	}
 
-	slide(world, delta) {
-		let [hitX, hitY] = this.onePass(world, delta);
+	slide(delta) {
+		let [hitX, hitY] = this.onePass(delta);
 		if (hitX.collision && hitY.collision) {
 			let ox = this.x, oy = this.y, ovx = this.vx, ovy = this.vy;
 			{
 				this.vy = 0;
 				this.y = hitY.newY;
-				[hitX,] = this.onePass(world, delta);
+				[hitX,] = this.onePass(delta);
 			}
 			this.x = ox; this.y = oy; this.vx = ovx; this.vy = ovy;
 			{
 				this.vx = 0;
 				this.x = hitX.newX;
-				[, hitY] = this.onePass(world, delta);
+				[, hitY] = this.onePass(delta);
 			}
 			this.x = ox; this.y = oy; this.vx = ovx; this.vy = ovy;
 			if (!hitY.collision || (hitX.collision && hitY.linear > hitX.linear)) {
@@ -140,7 +140,7 @@ class Collision {
 		} else if (hitY.collision && (!hitX.collision || hitY.linear < hitX.linear)) {
 			this.vy = 0;
 			this.y = hitY.newY;
-			[hitX,] = this.onePass(world, delta);
+			[hitX,] = this.onePass(delta);
 			this.x = hitX.newX;
 			if (hitX.collision) {
 				this.vx = 0;
@@ -148,7 +148,7 @@ class Collision {
 		} else if (hitX.collision) {
 			this.vx = 0;
 			this.x = hitX.newX;
-			[, hitY] = this.onePass(world, delta);
+			[, hitY] = this.onePass(delta);
 			this.y = hitY.newY;
 			if (hitY.collision) {
 				this.vy = 0;

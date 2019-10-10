@@ -19,11 +19,12 @@ class World {
 		this.loadedPositionMin = {"x": NaN, "y": NaN};
 		this.defaultTile = new Tile("00000000000000000000000000000000", "Unknown", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4woIEBISRGtRKQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAJElEQVQoz2NkwAH+M/zHKs7EQCIY1UAMYMQV3owMjKOhRD8NACTzBB3yj0euAAAAAElFTkSuQmCC", "");
 
-		socket.emit("WorldSetTile", 0, 1, "65a5fce8876d8e5bad5da510edb9a3f");
-		socket.emit("WorldSetTile", 1, -1, "65a5fce8876d8e5bad5da510edb9a3f");
+		socket.emit("WorldSetTile", -1, -2, "65a5fce8876d8e5bad5da510edb9a3f");
+		socket.emit("WorldSetTile", 0, -2, "65a5fce8876d8e5bad5da510edb9a3f");
+		socket.emit("WorldSetTile", 1, -2, "65a5fce8876d8e5bad5da510edb9a3f");
 	}
 	fetch(rx, ry) {
-		socket.emit("WorldGetRegion", rx*256, ry*256, reg=>{
+		socket.emit("WorldGetRegion", rx, ry, reg=>{
 			if(typeof(this.regions[rx]) === "undefined") {
 				this.regions[rx] = {};
 			}
@@ -52,7 +53,7 @@ class World {
 	}
 	update() {
 		// The four regions that are closest to the player should always be loaded
-		const playerRegionMin = {"x": Math.floor((player.x-128)/256),"y": Math.floor((player.y-128)/256)};
+		const playerRegionMin = {"x": Math.floor((player.collider.x-128)/256),"y": Math.floor((player.collider.y-128)/256)};
 		let overlap = {}; // Overlap of regions, from the perspective of the NEW region (false=reload, true=keep)
 		overlap.ll =
 			(playerRegionMin.x === this.loadedPositionMin.x || playerRegionMin.x === this.loadedPositionMin.x+1) &&

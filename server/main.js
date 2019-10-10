@@ -31,10 +31,10 @@ function getRegion(x, y) {
 	if (typeof(world[Math.floor(x/256)]) === "undefined") {
 		world[Math.floor(x/256)] = {};
 	}
-	if (typeof(world[Math.floor(x/256)][Math.floor(x/256)]) === "undefined") {
-		world[Math.floor(x/256)][Math.floor(x/256)] = Buffer.alloc(65536*16);
+	if (typeof(world[Math.floor(x/256)][Math.floor(y/256)]) === "undefined") {
+		world[Math.floor(x/256)][Math.floor(y/256)] = Buffer.alloc(65536*16);
 	}
-	return world[Math.floor(x/256)][Math.floor(x/256)];
+	return world[Math.floor(x/256)][Math.floor(y/256)];
 }
 const tiles = [];
 io.on("connection", function(client) {
@@ -54,8 +54,9 @@ io.on("connection", function(client) {
 		});
 	});
 	client.on("WorldGetRegion", (x, y, sendResp) => {
+		console.log("regionsent:", x, y);
 		if (typeof(sendResp) === "function") {
-			sendResp(getRegion(x, y));
+			sendResp(getRegion(x*256, y*256));
 		}
 	});
 	client.on("WorldNewTile", (graphic, name, code, sendResp) => {
