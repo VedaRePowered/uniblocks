@@ -6,7 +6,7 @@
   "scripts": {
     "build": "echo \"./build.sh\" | bash",
     "start": "node server/main.js",
-    "test": "concurrently 'nodemon server/main.js' 'xdg-open http://127.0.0.1:5000'",
+    "test": "concurrently 'nodemon --watch server server/main.js' 'node server/reloader.js'",
     "check": "jshint web/*.js server/*.js"
   },
   "repository": {
@@ -28,6 +28,7 @@
   },
   "homepage": "https://github.com/BEN1JEN/uniblocks#readme",
   "devDependencies": {
+    "chokidar": "^3.2.1",
     "concurrently": "^4.1.2",
     "jshint": "^2.10.2",
     "minify": "^4.1.3",

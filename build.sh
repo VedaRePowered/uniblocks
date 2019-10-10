@@ -20,6 +20,7 @@ combiner="
 	local data = file:read(\"*all\")
 	file:close()
 	file = io.open(\"build/web/index.html\", \"w\")
+	data = data:gsub(\"<!--%BUILDREMOVE%-->.-<!--%ENDREMOVE%-->\", \"\")
 	data = data:gsub(\"<script src=([^\\\"=<>]-)>[ \t\n]*</script>\", function(src)
 		local script = io.open(\"build/web\" .. src)
 		if script then
