@@ -1,17 +1,17 @@
 "use strict";
 
 const xAirDrag = 0.95;
-const xGroundDrag = 0.9;
+const xGroundDrag = 0.85;
 const yAirDrag = 0.975;
 const yWallDrag = 0.9;
-const jumpVelocity = 14;
-const airAcceleration = 0.3;
-const groundAcceleration = 0.6;
-const jumpGravity = 0.2;
+const jumpVelocity = 13;
+const airAcceleration = 0.4;
+const groundAcceleration = 1;
+const jumpGravity = 0.15;
 const gravity = 0.75;
 
 const wallJumpTime = 0.2;
-const endJumpSpeed = 7;
+const endJumpSpeed = 6;
 
 class Player {
 	constructor(id) {
@@ -40,25 +40,23 @@ class Player {
 			this.collider.vx += this.onGround ? groundAcceleration : airAcceleration;
 		}
 		if (inp.held[40]) { /* down */ }
-		if (inp.held[38]) { /* up */ }
-		if (this.onGround && inp.down[32]) { // space
+		if (this.onGround && inp.down[38]) { // up
 			this.collider.vy = jumpVelocity;
 			this.jumping = true;
 		}
-		if (this.leftWallTimer > 0 && ((inp.held[39] && inp.down[32]) || (inp.held[32] && inp.down[39]))) { // right+space
+		if (this.leftWallTimer > 0 && inp.down[38]) { // up (on wall)
 			this.collider.vy = jumpVelocity/4*3;
-
-			this.collider.vx = jumpVelocity/3;
+			this.collider.vx = jumpVelocity/3*2;
 			this.leftWallTimer = 0;
 			this.jumping = true;
 		}
-		if (this.rightWallTimer > 0 && ((inp.held[37] && inp.down[32]) || (inp.held[32] && inp.down[37]))) { // left+space
+		if (this.rightWallTimer > 0 && inp.down[38]) { // up (on wall)
 			this.collider.vy = jumpVelocity/4*3;
-			this.collider.vx = -jumpVelocity/3;
+			this.collider.vx = -jumpVelocity/3*2;
 			this.rightWallTimer = 0;
 			this.jumping = true;
 		}
-		if (this.collider.vy < endJumpSpeed || !inp.held[32]) {
+		if (this.collider.vy < endJumpSpeed || !inp.held[38]) {
 			this.jumping = false;
 		}
 
@@ -77,7 +75,7 @@ class Player {
 		}
 
 		let xdm = this.onGround ? xGroundDrag : xAirDrag;
-		let ydm = this.onLeftWall || this.onRightWall ? yWallDrag : yAirDrag;
+		let ydm = (this.onLeftWall || this.onRightWall) && !this.jumping ? yWallDrag : yAirDrag;
 
 		let txv = 0*(1/xdm-1); // to handle object-on-object drag in future
 		let tyv = 0*(1/ydm-1);
