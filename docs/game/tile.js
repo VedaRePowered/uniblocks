@@ -1,1 +1,1 @@
-class Tile{constructor(a,e,m,o){this.imageTag=new Image(16,16),this.imageTag.src=m,this.tileId=a,this.display={name:e},this.code=o}draw(a,e){const m=camera.toScreen(a,e);canvasContext.drawImage(this.imageTag,m.x-camera.zoom/2,m.y-camera.zoom/2,camera.zoom,camera.zoom)}}
+"use strict";class Tile{constructor(a,e,m,s){this.imageTag=new Image(16,16),this.imageTag.src=m,this.tileId=a,this.display={name:e},this.code=s}draw(a,e){const m=camera.toScreen(a,e);canvasContext.drawImage(this.imageTag,m.x-camera.zoom/2,m.y-camera.zoom/2,camera.zoom,camera.zoom)}}

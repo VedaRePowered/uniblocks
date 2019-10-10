@@ -1,5 +1,6 @@
 "use strict";
 /* jshint node: true */
+const devMode = typeof(process.argv[0]) !== "undefined" && process.argv[0] === "--dev";
 const httpPort = 5000;
 
 const Player = require("./player.js");

@@ -101,8 +101,6 @@ class World {
 	setTile(x, y, tileId) {
 		if (typeof(this.regions[Math.floor(x/256)]) !== "undefined" && typeof(this.regions[Math.floor(x/256)][Math.floor(y/256)]) !== "undefined") {
 			ruidToBuf(tileId, this.regions[Math.floor(x/256)][Math.floor(y/256)], ((x&255)+((y&255)*256))*16);
-		} else {
-			console.error("Error: SetTile in unloaded region.");
 		}
 	}
 }

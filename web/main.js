@@ -13,7 +13,7 @@ function init() {
 	canvasContext.imageSmoothingEnabled = false;
 
 	socket = io(serverAddress);
-	socket.on("connect", (playerId)=>{
+	socket.on("connect", (playerId) => {
 		camera = new Camera(64);
 		input = new Input();
 		player = new Player(playerId);
@@ -26,7 +26,7 @@ function init() {
 		}
 		setInterval(draw, 16);
 	});
-	socket.on("WorldSetTile", (x, y, tileId)=>{
+	socket.on("WorldSetTile", (x, y, tileId) => {
 		world.setTile(x, y, tileId);
 	});
 }
