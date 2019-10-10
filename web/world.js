@@ -19,9 +19,10 @@ class World {
 		this.loadedPositionMin = {"x": NaN, "y": NaN};
 		this.defaultTile = new Tile("00000000000000000000000000000000", "Unknown", "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4woIEBISRGtRKQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAJElEQVQoz2NkwAH+M/zHKs7EQCIY1UAMYMQV3owMjKOhRD8NACTzBB3yj0euAAAAAElFTkSuQmCC", "");
 
-		socket.emit("WorldSetTile", -1, -2, "65a5fce8876d8e5bad5da510edb9a3f");
-		socket.emit("WorldSetTile", 0, -2, "65a5fce8876d8e5bad5da510edb9a3f");
-		socket.emit("WorldSetTile", 1, -2, "65a5fce8876d8e5bad5da510edb9a3f");
+		for (let i = -3; i <= 3; i++) {
+			socket.emit("WorldSetTile", i, -3, "65a5fce8876d8e5bad5da510edb9a3f");
+			socket.emit("WorldSetTile", 3, i, "65a5fce8876d8e5bad5da510edb9a3f");
+		}
 	}
 	fetch(rx, ry) {
 		socket.emit("WorldGetRegion", rx, ry, reg=>{

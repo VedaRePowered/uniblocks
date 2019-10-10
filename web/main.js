@@ -36,8 +36,9 @@ function draw() {
 	document.getElementById("mainCanvas").width = vpSize.x;
 	document.getElementById("mainCanvas").height = vpSize.y;
 
+	input.update();
 	world.update();
-	player.update(input.held);
+	player.update(input);
 
 	world.draw();
 	player.draw();

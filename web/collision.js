@@ -28,7 +28,7 @@ class Collision {
 						possibleCollisionsReversed[code] = true;
 						let tid = world.getTile(Math.ceil(ix), Math.ceil(iy));
 						if (tid !== "00000000000000000000000000000000") {
-							possibleCollisions.push({"x": Math.ceil(ix), "y": Math.ceil(iy), "width": 1, "height": 1});
+							possibleCollisions.push({"x": Math.ceil(ix)-0.5, "y": Math.ceil(iy)+0.5, "width": 1, "height": 1});
 						}
 					}
 				}
@@ -80,12 +80,12 @@ class Collision {
 		for (const b of blocks) {
 			if (this.vy*delta > 0) {
 				let colliding = this.singleFaceCollide(this.x-hEdge, this.y+vEdge, gx-hEdge, gy+vEdge, b.x, b.x+b.width, b.y-b.height);
-				if (colliding && (!hitY.collision || colliding < hitY.linear)) {
+				if (typeof(colliding) === "number" && (!hitY.collision || colliding < hitY.linear)) {
 					hitY = {"collision": true, "collider": b, "linear": colliding, "newY": b.y-b.height-vEdge};
 				}
 			} else if (this.vy*delta < 0) {
 				let colliding = this.singleFaceCollide(this.x-hEdge, this.y-vEdge, gx-hEdge, gy-vEdge, b.x, b.x+b.width, b.y);
-				if (colliding && (!hitY.collision || colliding < hitY.linear)) {
+				if (typeof(colliding) === "number" && (!hitY.collision || colliding < hitY.linear)) {
 					hitY = {"collision": true, "collider": b, "linear": colliding, "newY": b.y+vEdge};
 				}
 			}
@@ -94,12 +94,12 @@ class Collision {
 		for (const b of blocks) {
 			if (this.vx*delta > 0) {
 				let colliding = this.singleFaceCollide(this.y-vEdge, this.x+hEdge, gy-vEdge, gx+hEdge, b.y, b.y-b.height, b.x);
-				if (colliding && (!hitX.collision || colliding < hitX.linear)) {
+				if (typeof(colliding) === "number" && (!hitX.collision || colliding < hitX.linear)) {
 					hitX = {"collision": true, "collider": b, "linear": colliding, "newX": b.x-hEdge};
 				}
 			} else if (this.vx*delta < 0) {
 				let colliding = this.singleFaceCollide(this.y-vEdge, this.x-hEdge, gy-vEdge, gx-hEdge, b.y, b.y-b.height, b.x+b.width);
-				if (colliding && (!hitX.collision || colliding < hitX.linear)) {
+				if (typeof(colliding) === "number" && (!hitX.collision || colliding < hitX.linear)) {
 					hitX = {"collision": true, "collider": b, "linear": colliding, "newX": b.x+b.width+hEdge};
 				}
 			}
