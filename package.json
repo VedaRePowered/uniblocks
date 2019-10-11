@@ -4,7 +4,8 @@
   "description": "An online multiplayer game.",
   "main": "server/main.js",
   "scripts": {
-    "build": "echo \"./build.sh\" | bash",
+    "build": "bash build.sh",
+    "deploy": "cd build; node server/main.js",
     "start": "node server/main.js",
     "test": "concurrently 'nodemon --watch server server/main.js' 'node server/reloader.js'",
     "check": "jshint web/*.js server/*.js"

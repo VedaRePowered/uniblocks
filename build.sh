@@ -20,7 +20,7 @@ combiner="
 	local data = file:read(\"*all\")
 	file:close()
 	file = io.open(\"build/web/index.html\", \"w\")
-	data = data:gsub(\"<!--%BUILDREMOVE%-->.-<!--%ENDREMOVE%-->\", \"\")
+	data = data:gsub(\"<div class=buildremove>.-</div>\", \"\")
 	data = data:gsub(\"<script src=([^\\\"=<>]-)>[ \t\n]*</script>\", function(src)
 		local script = io.open(\"build/web\" .. src)
 		if script then
@@ -45,7 +45,7 @@ combiner="
 			print(\"Not found: build/web/\" .. src)
 		end
 	end)
-	data = data:gsub(\"/%*%%BUILDHOST%%%*/.-/%*%%ENDHOST%%%*/\", \"\\\"https://uniblocks.101100.ca:5000\\\"\")
+	data = data:gsub(\"/%*%%BUILDHOST%%%*/.-/%*%%ENDHOST%%%*/\", \"\\\"https://uniblocks.101100.ca\\\"\")
 	file:write(data)
 	file:close()
 "
