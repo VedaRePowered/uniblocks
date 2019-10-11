@@ -6,7 +6,7 @@ let camera;
 let player;
 let world;
 let input;
-let vpSize;
+let vpSize = {"x": 0, "y": 0};
 function init() {
 	const canvas = document.getElementById("mainCanvas");
 	canvasContext = canvas.getContext("2d");
@@ -15,11 +15,6 @@ function init() {
 	socket = io(serverAddress);
 	socket.on("connect", (playerId) => {
 		camera = new Camera(64);
-		//gui = new Ui();
-		//gui.addElement(new Button(100, 100, 128, 32, document.getElementById("buttonImage"), function(){console.log("boop");}));
-		//let testImage = new Image();
-		//testImage.src = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4woIEBISRGtRKQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAAJElEQVQoz2NkwAH+M/zHKs7EQCIY1UAMYMQV3owMjKOhRD8NACTzBB3yj0euAAAAAElFTkSuQmCC";
-		//gui.addElement(new Dragable(200, 200, 60, 60, testImage, (x, y)=>{console.log(x, y);}));
 		input = new Input();
 		world = new World();
 		player = new Player(playerId);

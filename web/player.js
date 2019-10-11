@@ -26,6 +26,7 @@ class Player {
 		this.inventory = new Inventory();
 
 		this.inventory.addTile("65a5fce8876d8e5bad5da510edb9a30f");
+		this.inventory.addTile("bcaadcad2211c75bc25db581cb424d00");
 
 		this.colour = "#" + Math.floor(Math.random()*Math.pow(2, 24)).toString(16).padStart(6, "0");
 	}
