@@ -7,8 +7,25 @@ class Inventory {
 		this.page = 0;
 		this.lastSize = {"x": NaN, "y": NaN};
 		this.tileCounter = 0;
+		this.blockCreator = {"open": false};
 
-		this.createTile = this.gui.addElement(new Button(vpSize.x-camera.zoom*2, camera.zoom*0.5, camera.zoom*1.5, camera.zoom*0.375, document.getElementById("buttonImage"), ()=>{console.log("boop!");}));
+		this.createTile = this.gui.addElement(new Button(vpSize.x-camera.zoom*2, camera.zoom*0.5, camera.zoom*1.5, camera.zoom*0.375, document.getElementById("buttonImage"), ()=>{
+			let overlay = document.createElement("div");
+			let blockCreator = document.createElement("canvas");
+			overlay.classList.add("overlay");
+			blockCreator.id = "blockCreatorCanvas";
+			overlay.appendChild(blockCreator);
+			document.body.appendChild(overlay);
+			blockCreator.width = blockCreator.offsetWidth;
+			blockCreator.height = blockCreator.offsetHeight;
+			document.getElementById("inputOverlayButton").blur();
+			this.blockCreator.open = true;
+			this.blockCreator.context = blockCreator.getContext("2d");
+			this.blockCreator.loop = setInterval(()=>{this.renderBlockCreator()}, 16);
+		}));
+	}
+	renderBlockCreator() {
+		console.log(this);
 	}
 	addTile(ruid) {
 		const item = {"ruid": ruid, "originY": (this.tileCounter+1)*camera.zoom*1.25, "id": this.tileCounter};

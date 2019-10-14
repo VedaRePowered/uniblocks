@@ -12,7 +12,7 @@ class Input {
 			this.down[i] = false;
 			this.up[i] = false;
 		}
-		window.addEventListener("keydown", event => {
+		document.getElementById("inputOverlayButton").addEventListener("keydown", event => {
 			if (event.defaultPrevented) {
 				return; // Do nothing if the event was already processed
 			}
@@ -22,7 +22,7 @@ class Input {
 			// Cancel the default action to avoid it being handled twice
 			event.preventDefault();
 		}, true);
-		window.addEventListener("keyup", event => {
+		document.getElementById("inputOverlayButton").addEventListener("keyup", event => {
 			if (event.defaultPrevented) {
 				return; // Do nothing if the event was already processed
 			}

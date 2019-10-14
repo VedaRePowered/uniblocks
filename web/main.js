@@ -10,7 +10,6 @@ let vpSize = {"x": 0, "y": 0};
 function init() {
 	const canvas = document.getElementById("mainCanvas");
 	canvasContext = canvas.getContext("2d");
-	canvasContext.imageSmoothingEnabled = false;
 
 	socket = io(serverAddress);
 	socket.on("connect", (playerId) => {
@@ -29,12 +28,14 @@ function init() {
 	socket.on("WorldSetTile", (x, y, tileId) => {
 		world.setTile(x, y, tileId);
 	});
+	document.getElementById("inputOverlayButton").focus();
 }
 
 function draw() {
 	vpSize = {"x": innerWidth, "y": innerHeight};
 	document.getElementById("mainCanvas").width = vpSize.x;
 	document.getElementById("mainCanvas").height = vpSize.y;
+	canvasContext.imageSmoothingEnabled = false;
 
 	input.update();
 	world.update();
@@ -43,3 +44,5 @@ function draw() {
 	world.draw();
 	player.draw();
 }
+
+window.onload = init;
