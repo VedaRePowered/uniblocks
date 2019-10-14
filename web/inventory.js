@@ -7,39 +7,11 @@ class Inventory {
 		this.page = 0;
 		this.lastSize = {"x": NaN, "y": NaN};
 		this.tileCounter = 0;
-		this.blockCreator = {"open": false};
+		this.blockCreator = new BlockCreator();
 
 		this.createTile = this.gui.addElement(new Button(vpSize.x-camera.zoom*2, camera.zoom*0.5, camera.zoom*1.5, camera.zoom*0.375, document.getElementById("buttonImage"), ()=>{
-			let overlay = document.createElement("div");
-			let blockCreator = document.createElement("canvas");
-			let closeButton = document.createElement("button");
-			overlay.classList.add("overlay");
-			blockCreator.id = "blockCreatorCanvas";
-			closeButton.id = "blockCreatorClose";
-			closeButton.innerHTML = "&#x2612;";
-			closeButton.addEventListener("click", e=>{
-				clearInterval(this.blockCreator.loop);
-				this.blockCreator.overlayDiv.outerHTML = "";
-				this.blockCreator.open = false;
-			});
-			overlay.appendChild(blockCreator);
-			overlay.appendChild(closeButton);
-			document.body.insertBefore(overlay, document.getElementById("mainCanvas"));
-			document.getElementById("inputOverlayButton").blur();
-			this.blockCreator.overlayDiv = overlay;
-			this.blockCreator.open = true;
-			this.blockCreator.element = blockCreator;
-			this.blockCreator.context = blockCreator.getContext("2d");
-			this.blockCreator.loop = setInterval(()=>{this.renderBlockCreator();}, 16);
+			this.blockCreator.openMenu();
 		}));
-	}
-	renderBlockCreator() {
-		this.blockCreator.width = this.blockCreator.element.offsetWidth;
-		this.blockCreator.height = this.blockCreator.element.offsetHeight;
-		this.blockCreator.element.width = this.blockCreator.width;
-		this.blockCreator.element.height = this.blockCreator.height;
-		this.blockCreator.context.fillStyle = "#c9d4db";
-		this.blockCreator.context.fillRect(0, 0, this.blockCreator.width, this.blockCreator.height);
 	}
 	addTile(ruid) {
 		const item = {"ruid": ruid, "originY": (this.tileCounter+1)*camera.zoom*1.25, "id": this.tileCounter};
