@@ -20,7 +20,7 @@ app.use("world", express.static("world", {"extensions": ["json", "png"]}));
 const players = [];
 const world = {}; // world is devided into 256x256 regions
 function ruid() { // random unique identifier
-	return "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx".replace(/x/g, inch=>{return Math.floor(Math.random()*16).toString(16);});
+	return "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx".replace(/x/g, inch=>{return Math.floor(Math.random()*16).toString(16);});
 }
 function ruidToBuf(ruid, buf, start) {
 	for (let i = 0; i < 16; i++) {
@@ -88,6 +88,8 @@ io.on("connection", function(client) {
 			}
 		}
 		img.pack().pipe(fs.createWriteStream("./world/tile/" + String(newTileId) + ".png"));
+
+		console.log("New tile: " + newTileId);
 
 		if (typeof(sendResp) === "function") {
 			sendResp(newTileId);
