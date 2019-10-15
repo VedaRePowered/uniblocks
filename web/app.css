@@ -50,12 +50,41 @@ span {
 	outline: none;
 	color: #252a2d;
 	position: fixed;
-	float: right;
 	margin-top: 2.5em;
 	margin-left: calc(50vw + 30vmin - 1.5em);
 }
 #blockCreatorClose:hover {
 	color: #a6d1ed;
+}
+
+.blockCreator-textbox {
+	font-family: roberto, sans-serif;
+	font-size: 1em;
+	position: fixed;
+	margin-left: calc(50vw - 8vmin - 1.5em);
+	width: 30vmin;
+	resize: none;
+	background: rgba(64, 32, 0, 0.1);
+	outline: none;
+	border: inset 0.1em;
+}
+#blockCreatorName {
+	margin-top: calc(65vmin + 5em);
+	height: 2vmin;
+}
+#blockCreatorDescription {
+	margin-top: calc(68vmin + 5em);
+	height: 10vmin;
+}
+
+#blockCreatorSubmit {
+	margin-top: calc(70vmin + 5em);
+	margin-left: calc(50vw + 25vmin - 1.5em);
+	width: 5vmin;
+	height: 10vmin;
+	position: fixed;
+	background: rgba(64, 32, 0, 0.1);
+	outline: none;
 }
 
 .hidden {

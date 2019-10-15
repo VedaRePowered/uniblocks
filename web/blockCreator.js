@@ -4,24 +4,32 @@ class BlockCreator {
 		this.open = false;
 	}
 	openMenu() {
-		let overlay = document.createElement("div");
-		let blockCreator = document.createElement("canvas");
-		let closeButton = document.createElement("button");
+		const overlay = document.createElement("div");
+		const blockCreator = document.createElement("canvas");
+		const closeButton = document.createElement("button");
+		const nameField = document.createElement("input");
+		const descriptionField = document.createElement("textarea");
+		const submitButton = document.createElement("button");
 		overlay.classList.add("overlay");
 		blockCreator.id = "blockCreatorCanvas";
 		closeButton.id = "blockCreatorClose";
+		nameField.classList.add("blockCreator-textbox");
+		descriptionField.classList.add("blockCreator-textbox");
+		nameField.id = "blockCreatorName";
+		descriptionField.id = "blockCreatorDescription";
+		submitButton.id = "blockCreatorSubmit";
 		closeButton.innerHTML = "&#x2612;";
-		closeButton.addEventListener("click", e=>{
-			clearInterval(this.loop);
-			this.overlayDiv.outerHTML = "";
-			document.getElementById("inputOverlayButton").focus();
-			document.removeEventListener("mousedown", this.events.down);
-			document.removeEventListener("mousemove", this.events.move);
-			document.removeEventListener("mouseup", this.events.up);
-			this.open = false;
-		});
+		submitButton.innerHTML = "&#x21b5;";
+		closeButton.addEventListener("click", e=>{this.close();})
+		submitButton.addEventListener("click", e=>{this.define(); this.close();})
+		nameField.setAttribute("type", "text");
+		nameField.setAttribute("placeholder", "Name");
+		descriptionField.setAttribute("placeholder", "Description");
 		overlay.appendChild(blockCreator);
 		overlay.appendChild(closeButton);
+		overlay.appendChild(nameField);
+		overlay.appendChild(descriptionField);
+		overlay.appendChild(submitButton);
 		document.body.insertBefore(overlay, document.getElementById("mainCanvas"));
 		document.getElementById("inputOverlayButton").blur();
 		this.overlayDiv = overlay;
@@ -53,6 +61,26 @@ class BlockCreator {
 		this.image.palette[5] = 0x00ff00ff;
 		this.image.palette[6] = 0x0000ffff;
 		this.image.palette[7] = 0xff007fff;
+	}
+	define() {
+		socket.emit(
+			"WorldNewTile",
+			this.image,
+			document.getElementById("blockCreatorName"),
+			document.getElementById("blockCreatorDescription"),
+			"", 
+			tid => {
+				player.inventory.addTile(tid);
+		});
+	}
+	close() {
+		clearInterval(this.loop);
+		this.overlayDiv.outerHTML = "";
+		document.getElementById("inputOverlayButton").focus();
+		document.removeEventListener("mousedown", this.events.down);
+		document.removeEventListener("mousemove", this.events.move);
+		document.removeEventListener("mouseup", this.events.up);
+		this.open = false;
 	}
 	penDown(event) {
 		this.pencil.down = true;
