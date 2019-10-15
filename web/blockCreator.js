@@ -1,3 +1,4 @@
+"use strict";
 class BlockCreator {
 	constructor () {
 		this.open = false;
@@ -39,7 +40,7 @@ class BlockCreator {
 			"down": e => {this.penDown(e);},
 			"move": e => {this.penMove(e);},
 			"up": e => {this.penUp(e);},
-		}
+		};
 		document.addEventListener("mousedown", this.events.down);
 		document.addEventListener("mousemove", this.events.move);
 		document.addEventListener("mouseup", this.events.up);
@@ -107,7 +108,7 @@ class BlockCreator {
 			"g": (this.image.palette[this.pencil.colour] & 0x00ff0000) >>> 16,
 			"b": (this.image.palette[this.pencil.colour] & 0x0000ff00) >>> 8,
 			"a": this.image.palette[this.pencil.colour] & 0x000000ff,
-		}
+		};
 	}
 	colourToNumber(r, g, b, a) {
 		return r<<24 | g<<16 | b<<8 | a;
@@ -126,7 +127,7 @@ class BlockCreator {
 
 		const corner = this.gridToPixel(0, 0);
 		this.context.drawImage(document.getElementById("editbgImage"), corner.x-this.gridSize()/2, corner.y-this.gridSize()/2, this.gridSize()*17, this.gridSize()*23);
-		const size = this.gridSize()
+		const size = this.gridSize();
 		for (let y = 0; y < 16; y++) {
 			for (let x = 0; x < 16; x++) {
 				const pos = this.gridToPixel(x, y);
@@ -148,41 +149,17 @@ class BlockCreator {
 		const sliderPos = this.gridToPixel(0, 18);
 		const colour = this.numberToColour(this.pencil.colour);
 		const redSlider = this.context.createLinearGradient(0, 0, this.gridSize()*4, 0);
-		redSlider.addColorStop(0, "rgba(0," +
-			((this.image.palette[this.pencil.colour] & 0x00ff0000) >>> 16).toString() + "," +
-			((this.image.palette[this.pencil.colour] & 0x0000ff00) >>> 8).toString() + "," +
-			(this.image.palette[this.pencil.colour] & 0x000000ff).toString() + ")");
-		redSlider.addColorStop(1, "rgba(255," +
-			((this.image.palette[this.pencil.colour] & 0x00ff0000) >>> 16).toString() + "," +
-			((this.image.palette[this.pencil.colour] & 0x0000ff00) >>> 8).toString() + "," +
-			(this.image.palette[this.pencil.colour] & 0x000000ff).toString() + ")");
+		redSlider.addColorStop(0, "rgba(0," + colour.g.toString() + "," + colour.b.toString() + "," + colour.a.toString());
+		redSlider.addColorStop(1, "rgba(255," + colour.g.toString() + "," + colour.b.toString() + "," + colour.a.toString());
 		const greenSlider = this.context.createLinearGradient(0, 0, this.gridSize()*4, 0);
-		greenSlider.addColorStop(0, "rgba(" +
-			((this.image.palette[this.pencil.colour] & 0xff000000) >>> 24).toString() + ",0," +
-			((this.image.palette[this.pencil.colour] & 0x0000ff00) >>> 8).toString() + "," +
-			(this.image.palette[this.pencil.colour] & 0x000000ff).toString() + ")");
-		greenSlider.addColorStop(1, "rgba(" +
-			((this.image.palette[this.pencil.colour] & 0xff000000) >>> 24).toString() + ",255," +
-			((this.image.palette[this.pencil.colour] & 0x0000ff00) >>> 8).toString() + "," +
-			(this.image.palette[this.pencil.colour] & 0x000000ff).toString() + ")");
+		greenSlider.addColorStop(0, "rgba(" + colour.r.toString() + ",0," + colour.b.toString() + "," + colour.a.toString());
+		greenSlider.addColorStop(1, "rgba(" + colour.r.toString() + ",255," + colour.b.toString() + "," + colour.a.toString());
 		const blueSlider = this.context.createLinearGradient(0, 0, this.gridSize()*4, 0);
-		blueSlider.addColorStop(0, "rgba(" +
-			((this.image.palette[this.pencil.colour] & 0xff000000) >>> 24).toString() + "," +
-			((this.image.palette[this.pencil.colour] & 0x00ff0000) >>> 16).toString() + ",0," +
-			(this.image.palette[this.pencil.colour] & 0x000000ff).toString() + ")");
-		blueSlider.addColorStop(1, "rgba(" +
-			((this.image.palette[this.pencil.colour] & 0xff000000) >>> 24).toString() + "," +
-			((this.image.palette[this.pencil.colour] & 0x00ff0000) >>> 16).toString() + ",255," +
-			(this.image.palette[this.pencil.colour] & 0x000000ff).toString() + ")");
+		blueSlider.addColorStop(0, "rgba(" + colour.r.toString() + "," + colour.g.toString() + ",0," + colour.a.toString());
+		blueSlider.addColorStop(1, "rgba(" + colour.r.toString() + "," + colour.g.toString() + ",255," + colour.a.toString());
 		const alphaSlider = this.context.createLinearGradient(0, 0, this.gridSize()*4, 0);
-		alphaSlider.addColorStop(0, "rgba(" +
-			((this.image.palette[this.pencil.colour] & 0xff000000) >>> 24).toString() + "," +
-			((this.image.palette[this.pencil.colour] & 0x00ff0000) >>> 16).toString() + "," +
-			((this.image.palette[this.pencil.colour] & 0x0000ff00) >>> 8).toString() + ",0)");
-		alphaSlider.addColorStop(1, "rgba(" +
-			((this.image.palette[this.pencil.colour] & 0xff000000) >>> 24).toString() + "," +
-			((this.image.palette[this.pencil.colour] & 0x00ff0000) >>> 16).toString() + "," +
-			((this.image.palette[this.pencil.colour] & 0x0000ff00) >>> 8).toString() + ",255)");
+		alphaSlider.addColorStop(0, "rgba(" + colour.r.toString() + "," + colour.g.toString() + "," + colour.b.toString() + ",0");
+		alphaSlider.addColorStop(1, "rgba(" + colour.r.toString() + "," + colour.g.toString() + "," + colour.b.toString() + ",255");
 		this.context.fillStyle = redSlider;
 		this.context.fillRect(sliderPos.x, sliderPos.y, this.gridSize()*4, this.gridSize());
 		this.context.moveTo(sliderPos.x+colour.r/255*this.gridSize()*4, sliderPos.y);

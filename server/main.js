@@ -43,21 +43,21 @@ io.on("connection", function(client) {
 	console.log("Recieved socket.io connection. ID=" + String(playerId));
 	client.on("WorldGetTile", (tileId, sendResp) => {
 		console.log("gettile: " + String(tileId));
-		fs.readFile("./world/tile/" + String(tileId) + ".png", (err, pngData) => {
-			if (err) {
-				console.log(err);
-				sendResp(false, err);
+		fs.readFile("./world/tile/" + String(tileId) + ".png", (pngErr, pngData) => {
+			if (pngErr) {
+				console.log(pngErr);
+				sendResp(false, pngErr);
 			} else {
-				fs.readFile("./world/tile/" + String(tileId) + ".json", (err, jsonData) => {
-					if (err) {
-						console.log(err);
-						sendResp(false, err);
+				fs.readFile("./world/tile/" + String(tileId) + ".json", (jsonErr, jsonData) => {
+					if (jsonErr) {
+						console.log(jsonErr);
+						sendResp(false, jsonErr);
 					} else {
 						const info = JSON.parse(jsonData);
 						console.log("s");
 						sendResp(true, {"name": info.name, "description": info.description, "graphic": "data:image/png;base64," + pngData.toString("base64"), "code": info.code});
 					}
-				})
+				});
 			}
 		});
 	});
@@ -81,7 +81,6 @@ io.on("connection", function(client) {
 				const g = (graphic.palette[graphic.grid[x+y*16]] & 0x00ff0000) >>> 16;
 				const b = (graphic.palette[graphic.grid[x+y*16]] & 0x0000ff00) >>> 8;
 				const a = graphic.palette[graphic.grid[x+y*16]] & 0x000000ff;
-				console.log(r, g, b, a)
 				img.data[x*4+y*64] = r;
 				img.data[x*4+y*64+1] = g;
 				img.data[x*4+y*64+2] = b;
