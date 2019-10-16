@@ -14,7 +14,7 @@ const wallJumpTime = 0.2;
 const endJumpSpeed = 6;
 
 class Player {
-	constructor(id) {
+	constructor(id, colour) {
 		this.id = id;
 		this.collider = new Collision(1, 1);
 		this.onGround = false;
@@ -28,9 +28,9 @@ class Player {
 		this.inventory.addTile("65a5fce8876d8e5bad5da510edb9a30f");
 		this.inventory.addTile("bcaadcad2211c75bc25db581cb424d00");
 
-		this.colour = "#" + Math.floor(Math.random()*Math.pow(2, 24)).toString(16).padStart(6, "0");
+		this.colour = colour || "#" + Math.floor(Math.random()*Math.pow(2, 24)).toString(16).padStart(6, "0");
 	}
-	update(inp) {
+	update(inp) { // update the LOCAL player
 		this.collider.vy -= this.jumping ? jumpGravity : gravity;
 		this.leftWallTimer -= 1/60;
 		this.rightWallTimer -= 1/60;
@@ -78,18 +78,19 @@ class Player {
 		let xdm = this.onGround ? xGroundDrag : xAirDrag;
 		let ydm = (this.onLeftWall || this.onRightWall) && !this.jumping ? yWallDrag : yAirDrag;
 
-		let txv = 0*(1/xdm-1); // to handle object-on-object drag in future
+		let txv = 0*(1/xdm-1); // to handle object-on-object drag in the future
 		let tyv = 0*(1/ydm-1);
 
 		this.collider.vx = (this.collider.vx + txv) * xdm;
 		this.collider.vy = (this.collider.vy + tyv) * ydm;
 
 		camera.scroll(this.collider.x, this.collider.y, 0.1);
+
+		socket.emit("PlayerMove", this.collider.x, this.collider.y);
 	}
 	draw() {
 		canvasContext.fillStyle = this.colour;
 		const screenPos = camera.toScreen(this.collider.x, this.collider.y);
 		canvasContext.fillRect(screenPos.x-camera.zoom/2, screenPos.y-camera.zoom/2, camera.zoom, camera.zoom);
-		this.inventory.draw();
 	}
 }

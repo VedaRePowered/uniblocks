@@ -40,6 +40,11 @@ const tiles = [];
 io.on("connection", function(client) {
 	const playerId = ruid();
 	players[playerId] = new Player();
+	client.emit("ready", playerId, players[playerId].colour);
+	io.sockets.emit("PlayerJoin", playerId, players[playerId].colour);
+	for (const [id, p] of Object.entries(players)) {
+		io.sockets.emit("PlayerJoin", id, p.colour);
+	}
 	console.log("Recieved socket.io connection. ID=" + String(playerId));
 	client.on("WorldGetTile", (tileId, sendResp) => {
 		console.log("gettile: " + String(tileId));
@@ -100,9 +105,13 @@ io.on("connection", function(client) {
 		io.sockets.emit("WorldSetTile", x, y, tileId);
 		console.log(tileId, x, y);
 	});
+	client.on("PlayerMove", (x, y) => {
+		io.sockets.emit("PlayerMove", playerId, x, y);
+	})
 	client.on("disconnect", () => {
-		players[playerId] = undefined;
+		delete players[playerId];
 		console.log("Player disconnected. ID=" + String(playerId));
+		io.sockets.emit("PlayerLeave", playerId);
 	});
 });
 

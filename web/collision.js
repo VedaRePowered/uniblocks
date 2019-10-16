@@ -34,11 +34,11 @@ class Collision {
 				}
 			}
 		}
-		for (const co of registeredCollisionObjects) {
+		/*for (const co of registeredCollisionObjects) {
 			if (co.registeredId !== this.registeredId) {
 				possibleCollisions.push({"x": co.x-co.width/2, "y": co.y+co.height/2, "width": co.width, "height": co.height, "dx": co.vx, "dy": co.vy}); // drag velocity
 			}
-		}
+		}*/
 		return possibleCollisions;
 	}
 
