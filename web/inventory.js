@@ -15,19 +15,13 @@ class Inventory {
 	}
 	addTile(ruid) {
 		const item = {"ruid": ruid, "originY": (this.tileCounter+1)*camera.zoom*1.25, "id": this.tileCounter};
-		this.tileCounter++;
-		world.loadTile(ruid, tile => {
-			item.dragable = new Dragable(vpSize.x-camera.zoom*1.75, 0, 64, 64, tile.imageTag, function(posX, posY) {
-				this.x = vpSize.x-camera.zoom*1.75;
-				this.y = item.originY;
-
-				const pos = camera.toWorld(posX, posY);
-				socket.emit("WorldSetTile", Math.round(pos.x), Math.round(pos.y), ruid);
-			});
-			this.gui.addElement(item.dragable);
+		newDragableTile(ruid, vpSize.x-camera.zoom*1.75, item.originY, dragable => {
+			item.dragable = dragable;
+			this.gui.addElement(dragable);
 			this.tiles[item.id] = item;
 			this.lastSize = {"x": NaN, "y": NaN};
 		});
+		this.tileCounter++;
 	}
 	draw() {
 		if (this.lastSize.x !== vpSize.x || this.lastSize.y !== vpSize.y) {

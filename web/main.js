@@ -6,6 +6,7 @@ let camera;
 let player;
 let multiplayers = {};
 let world;
+let interaction;
 let input;
 let vpSize = {"x": 0, "y": 0};
 function init() {
@@ -16,6 +17,7 @@ function init() {
 	socket.on("ready", (playerId, colour) => {
 		camera = new Camera(64);
 		input = new Input();
+		interaction = new Interaction();
 		world = new World();
 		player = new Player(playerId, colour);
 		world.update();
@@ -54,6 +56,7 @@ function draw() {
 	canvasContext.imageSmoothingEnabled = false;
 
 	input.update();
+	interaction.update();
 	world.update();
 	player.update(input);
 
