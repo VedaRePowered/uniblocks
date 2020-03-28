@@ -74,7 +74,7 @@ io.on("connection", function(client) {
 	});
 	client.on("WorldNewTile", (graphic, name, description, code, sendResp) => {
 		const newTileId = ruid();
-		fs.writeFile("./world/tile/" + String(newTileId) + ".json", JSON.stringify({"name": name, "description": description, "code": code}));
+		fs.writeFile("./world/tile/" + String(newTileId) + ".json", JSON.stringify({"name": name, "description": description, "code": code}), err => {if (err) console.log("Block file couldn't be written.")});
 		const img = new PNG({
 			"width": 16,
 			"height": 16,
@@ -107,7 +107,7 @@ io.on("connection", function(client) {
 	});
 	client.on("PlayerMove", (x, y) => {
 		io.sockets.emit("PlayerMove", playerId, x, y);
-	})
+	});
 	client.on("disconnect", () => {
 		delete players[playerId];
 		console.log("Player disconnected. ID=" + String(playerId));

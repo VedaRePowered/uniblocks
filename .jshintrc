@@ -1,6 +1,6 @@
 {
-	"esversion": 6,
-	"maxerr": 12,
+	"esversion": 7,
+	"maxerr": 100,
 
 	"undef": true,
 	"curly": true,
@@ -20,7 +20,6 @@
 		"innerHeight": true,
 
 		"io": true,
-		"serverAddress": true,
 
 		"canvasContext": true,
 		"socket": true,

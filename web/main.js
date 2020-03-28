@@ -13,7 +13,7 @@ function init() {
 	const canvas = document.getElementById("mainCanvas");
 	canvasContext = canvas.getContext("2d");
 
-	socket = io(serverAddress);
+	socket = io(window.location.origin);
 	socket.on("ready", (playerId, colour) => {
 		camera = new Camera(64);
 		input = new Input();
