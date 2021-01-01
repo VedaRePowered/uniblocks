@@ -15,7 +15,7 @@ class Inventory {
 	}
 	addTile(ruid) {
 		const item = {"ruid": ruid, "originY": (this.tileCounter+1)*camera.zoom*1.25, "id": this.tileCounter};
-		newDragableTile(ruid, vpSize.x-camera.zoom*1.75, item.originY, dragable => {
+		newDragableTile(ruid, -camera.zoom*1.75, item.originY, dragable => {
 			item.dragable = dragable;
 			this.gui.addElement(dragable);
 			this.tiles[item.id] = item;

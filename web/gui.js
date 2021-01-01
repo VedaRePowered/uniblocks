@@ -51,6 +51,7 @@ class Button {
 class Dragable {
 	constructor(x, y, w, h, icon, callback) {
 		this.imageTag = icon;
+		this.originX = x; this.originY = y;
 		this.x = x; this.y = y;
 		this.width = w; this.height = h;
 		this.callback = callback;
